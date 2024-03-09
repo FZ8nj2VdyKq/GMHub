@@ -24,6 +24,7 @@ local codes = {
     "Update3", 
     "Glitched",
     "BLAMSPOTBUGFIXCODEMUSTBESUBBEDTOWORK!"
+    "shockssuperspecialultrasecretcodebecauseineedsubscribersmustbesubscribedtowork",
 }
 
 return codes
