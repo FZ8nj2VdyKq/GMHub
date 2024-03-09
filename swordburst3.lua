@@ -16,7 +16,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Swordburst 3",
-    SubTitle = "by fallen_del",
+    SubTitle = "GMlong",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -491,7 +491,7 @@ Tabs.miscTab:AddButton({
 Tabs.miscTab:AddToggle("autorejoin", {Title = "Auto Rejoin When Disconnected", Default = swordburst["autorejoin"].Value})
 
 Tabs.creditTab:AddParagraph({
-    Title = "Scripts Made by fallen_del",
+    Title = "Scripts Made by GMlong",
     Content = ""
 })
 Tabs.creditTab:AddParagraph({
@@ -502,7 +502,7 @@ Tabs.creditTab:AddButton({
 	Title = "Discord Server",
     Description = "",
 	Callback = function()
-        setclipboard("https://discord.gg/auzBFqDrwZ")
+        setclipboard("https://discord.gg/swordburst3")
   	end    
 })
 
