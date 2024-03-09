@@ -4,7 +4,7 @@ local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.
 
 local Window = Fluent:CreateWindow({
     Title = "Swordburst 3",
-    SubTitle = "GMHub",
+    SubTitle = "by fallen_del",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -52,10 +52,11 @@ local quests = {}
 local waystone = {}
 local methods = {"above", "below", "behind"}
 local floors = {"Floor1", "Floor2", "Floor3", "Town"}
-local craftings = {"Enchanting", "Mounts", "Smithing"}
 local category = {"Material", "Mount", "Cosmetic", "Pickaxe"}
+local enchanttype = {["1"] = "MOVESPD + 20%", ["2"] = "ATK + 8%", ["3"] = "HPREGEN + 20%", ["4"] = "MAXHP + 20%", ["5"] = "CRIT + 10%", ["6"] = "SPREGEN + 40%", ["7"] = "CRITDMG + 75%", ["8"] = "BURSTPWR + 10%", ["9"] = "STAMINA + 25%",}
 local raritys = {"common (white)", "uncommon (green) and below", "rare (blue) and below", "epic (purple) and below", "legendary (orange) and below"}
-local realrarity = {["common (white)"] = 1, ["uncommon (green) and below"] = 2, ["rare (blue) and below"] = 3, ["epic (purple) and below"] = 4, ["legendary (orange) and below"] = 5,}
+local rarityw = {"common (white) and higher", "uncommon (green) and higher", "rare (blue) and higher", "epic (purple) and higher", "legendary (orange) only"}
+local realrarity = {["common (white)"] = 1, ["uncommon (green)"] = 2, ["rare (blue)"] = 3, ["epic (purple)"] = 4, ["legendary (orange)"] = 5,}
 local swordburst = {
     method = {Value = "behind"},
     choosemob = {Value = nil},
@@ -71,15 +72,15 @@ local swordburst = {
     killauraplr = {Value = false},
     dist = {Value = 15},
     cds = {Value = 0.4},
-    cd = {Value = 0.3},
+    cd = {Value = 0.1},
     range = {Value = 40},
     rarity = {Value = nil},
     webhook = {Value = false},
-    cdw = {Value = 5},
     targetplr = {Value = false},
     choosetarget = {Value = false},
     ignoreparty = {Value = false},
     autorejoin = {Value = false},
+    rarityw = {Value = "legendary (orange) only"}
 }
 local spawnlocation = {
     ["Chill Bat"] = {CFrame = CFrame.new(-1673.8651123046875, 236.44541931152344, -1950.248046875)},
@@ -125,7 +126,9 @@ local function getallplr()
     return e
 end
 
-local function webhook(url)
+local function webhook(url,item, enchant)
+    local item = item or "nothing"
+    local enchant = enchanttype[enchant] or "nothing"
     local level = lplr.PlayerGui.MainHUD.Frame.Bars.LevelShadow.LevelLabel.Text
     local xp = lplr.PlayerGui.MainHUD.Frame.XPFrame.XPCount.Text
     local Vel = lplr.PlayerGui.Inventory.Frame.Currency.Vel.TextLabel.Text
@@ -133,7 +136,7 @@ local function webhook(url)
         ["embeds"] = {
             {
                 ["title"] = "**SwordBurst 3**",
-                ["description"] = "Username: " .. lplr.Name.."\n Level: " .. level .. "\n XP: " .. xp .. "\n Vel: " .. Vel,
+                ["description"] = "Username: " .. lplr.Name.."\n Level: " .. level .. "\n XP: " .. xp .. "\n Vel: " .. Vel .. "\n Got Item : " .. item .. " Enchant : " .. enchant,
                 ["type"] = "rich",
                 ["color"] = tonumber(0x7269da),
             }
@@ -462,8 +465,9 @@ Tabs.miscTab:AddButton({
     Description = "",
 	Callback = function()
         if Options["rarity"].Value then
+            local e = string.split(Options["rarity"].Value, " ")[1] .. " " .. string.split(Options["rarity"].Value, " ")[2]
             for i,v in next, ItemList do
-                if v.Rarity and v.Rarity <= realrarity[Options["rarity"].Value] and not table.find(category, v.Category) then
+                if v.Rarity and v.Rarity <= realrarity[e] and not table.find(category, v.Category) then
                     for _,items in next, ReplicatedStorage.Profiles[lplr.Name].Inventory:GetChildren() do
                         if string.find(i, items.Name) then
                             ReplicatedStorage:WaitForChild("Systems"):WaitForChild("Crafting"):WaitForChild("Dismantle"):FireServer(items)
@@ -479,7 +483,7 @@ Tabs.miscTab:AddButton({
 Tabs.miscTab:AddToggle("autorejoin", {Title = "Auto Rejoin When Disconnected", Default = swordburst["autorejoin"].Value})
 
 Tabs.creditTab:AddParagraph({
-    Title = "Scripts Made by GMHub",
+    Title = "Scripts Made by fallen_del",
     Content = ""
 })
 Tabs.creditTab:AddParagraph({
@@ -490,17 +494,8 @@ Tabs.creditTab:AddButton({
 	Title = "Discord Server",
     Description = "",
 	Callback = function()
-        setclipboard("https://discord.gg/swordburst3")
+        setclipboard("https://discord.gg/auzBFqDrwZ")
   	end    
-})
-
-Tabs.webhookTab:AddSlider("cdw", {
-    Title = "Webhook Cooldown (Minutes)",
-    Description = "",
-    Default = swordburst["cdw"].Value,
-    Min = 1,
-    Max = 60,
-    Rounding = 1,
 })
 
 Tabs.webhookTab:AddInput("Input", {
@@ -522,6 +517,13 @@ Tabs.webhookTab:AddButton({
             webhook(webhookurl)
         end
   	end    
+})
+
+Tabs.webhookTab:AddDropdown("rarityw", {
+    Title = "Select Rarity for webhook",
+    Values = rarityw,
+    Multi = false,
+    Default = swordburst["rarityw"].Value,
 })
 
 Tabs.webhookTab:AddToggle("webhook", {Title = "Webhook", Default = swordburst["webhook"].Value})
@@ -816,11 +818,18 @@ task.spawn(function()
 end)
 
 task.spawn(function()
-    while task.wait(minutes(Options["cdw"].Value)) do
-        if Options["webhook"].Value and webhookurl then
-            webhook(webhookurl)
+    ReplicatedStorage.Profiles[lplr.Name].Inventory.ChildAdded:Connect(function(items)
+        if Options["webhook"].Value and webhookurl and Options["rarityw"].Value then
+            local e = string.split(Options["rarityw"].Value, " ")[1] .. " " .. string.split(Options["rarityw"].Value, " ")[2]
+            for i,v in next, ItemList do
+                if v.Rarity and v.Rarity >= realrarity[e] and not table.find(category, v.Category) then
+                    if string.find(i, items.Name) then
+                        webhook(webhookurl, items.Name, tostring(items.LegendEnchant.Value) or "nothing")
+                    end
+                end
+            end
         end
-    end
+    end)
 end)
 
 task.spawn(function()
@@ -853,17 +862,18 @@ Fluent:Notify({
     Duration = 8
 })
 SaveManager:LoadAutoloadConfig()
+
 task.spawn(function()
     while task.wait(.5) do
         if not lplr:WaitForChild("PlayerGui"):FindFirstChild("lelelel") then
             local ScreenGui = Instance.new("ScreenGui")
             local ImageButton = Instance.new("ImageButton")
             local TextLabel = Instance.new("TextLabel")
-
+        
             ScreenGui.Name = "lelelel"
             ScreenGui.Parent = lplr:WaitForChild("PlayerGui")
             ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-
+        
             ImageButton.Parent = ScreenGui
             ImageButton.BackgroundColor3 = Color3.fromRGB(116, 104, 96)
             ImageButton.BackgroundTransparency = 0.500
@@ -873,7 +883,7 @@ task.spawn(function()
             ImageButton.Size = UDim2.new(0, 137, 0, 35)
             ImageButton.Image = "http://www.roblox.com/asset/?id=1547208871"
             ImageButton.ImageColor3 = Color3.fromRGB(162, 255, 188)
-
+        
             TextLabel.Parent = ImageButton
             TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             TextLabel.BackgroundTransparency = 1.000
@@ -885,7 +895,7 @@ task.spawn(function()
             TextLabel.Text = "Open/Close Gui"
             TextLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
             TextLabel.TextSize = 14.000
-
+        
             local function IOUVXF_fake_script()
                 local script = Instance.new('LocalScript', ScreenGui)
                 local Button = script.Parent.ImageButton
