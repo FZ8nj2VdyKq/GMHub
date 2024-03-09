@@ -67,9 +67,9 @@ local swordburst = {
     autoquest = {Value = false},
     mine = {Value = nil},
     automine = {Value = false},
-    autocollect = {Value = false},
+    autocollect = {Value = true},
     aura = {Value = false},
-    killauraplr = {Value = false},
+    killauraplr = {Value = true},
     dist = {Value = 15},
     cds = {Value = 0.4},
     cd = {Value = 0.1},
@@ -79,7 +79,7 @@ local swordburst = {
     targetplr = {Value = false},
     choosetarget = {Value = false},
     ignoreparty = {Value = false},
-    autorejoin = {Value = false},
+    autorejoin = {Value = true},
     rarityw = {Value = "legendary (orange) only"}
 }
 local spawnlocation = {
