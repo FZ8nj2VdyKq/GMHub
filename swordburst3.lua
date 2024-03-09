@@ -1,15 +1,3 @@
-if getgenv().keysystem == false then
-    local KeySystemUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/MaGiXxScripter0/keysystemv2api/master/ui/xrer_mstudio45.lua"))()
-    KeySystemUI.New({
-        ApplicationName = "FallAngelHub", -- Your Key System Application Name
-        Name = "FallAngelHub", -- Your Script name
-        Info = "Get Key For FallAngelHub", -- Info text in the GUI, keep empty for default text.
-        DiscordInvite = "https://discord.gg/auzBFqDrwZ", -- Optional.
-        AuthType = "clientid" -- Can select verifycation with ClientId or IP ("clientid" or "ip")
-    })
-    repeat task.wait() until KeySystemUI.Finished() or KeySystemUI.Closed
-end
-
 local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
 local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
 local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
