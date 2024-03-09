@@ -73,7 +73,7 @@ local swordburst = {
     dist = {Value = 15},
     cds = {Value = 0.4},
     cd = {Value = 0.1},
-    range = {Value = 40},
+    range = {Value = 70},
     rarity = {Value = nil},
     webhook = {Value = false},
     targetplr = {Value = false},
