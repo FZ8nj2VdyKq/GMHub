@@ -18,6 +18,14 @@ elseif game.PlaceId == 12886143095  then
 elseif game.PlaceId == 4996049426 then
     print ("All Star Tower Defense")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/buang5516/buanghub/main/allStarTowerDefense.lua"))()
+elseif game.PlaceId == 16510724413 then
+    print ("Pet Catchers")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Catto-YFCN/GatoHub/main/PetCatchers"))()
+
+
+
+
+
 
     
 end
