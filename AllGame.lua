@@ -21,7 +21,9 @@ elseif game.PlaceId == 4996049426 then
 elseif game.PlaceId == 16510724413 then
     print ("Pet Catchers")
     loadstring(game:HttpGet("https://raw.githubusercontent.com/Catto-YFCN/GatoHub/main/PetCatchers"))()
-
+elseif game.PlaceId == 15840422464 or game.PlaceId == 6403373529 or game.PlaceId == 198116126 or game.PlaceId == 286090429 or game.PlaceId == 142823291 or game.PlaceId == 10449761463 or game.PlaceId == 15532962292 then
+    print ("HoHoHub")
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/acsu123/HOHO_H/main/Loading_UI"))()
 
 
 
